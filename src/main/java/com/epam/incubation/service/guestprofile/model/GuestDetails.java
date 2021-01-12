@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class GuestDetails implements UserDetails {
 
+	private static final long serialVersionUID = 1L;
 	private Guest guest;
 
 	public GuestDetails(Guest guest) {

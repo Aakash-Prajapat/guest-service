@@ -37,6 +37,10 @@ public class GuestDataModel {
 	@NotNull(message = "Gender is mandatory")
 	private Character gender;
 
+	public GuestDataModel() {
+		
+	}
+	
 	public GuestDataModel(Guest guest) {
 		this.firstName = guest.getName().getFirstName();
 		this.middleName = guest.getName().getMiddleName();

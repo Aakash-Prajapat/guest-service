@@ -30,7 +30,7 @@ public class GuestProfileResourceImpl implements GuestProfileResource {
 	@Autowired
 	GuestServiceImpl guestService;
 
-	@GetMapping("/guestservice/{id}")
+	@GetMapping("/guest/{id}")
 	@ApiOperation(value = "Get Guest Details by Id")
 	@ApiResponses(value = {
 		    @ApiResponse(code = 200, message = "Successfully retrieved"),
@@ -40,13 +40,13 @@ public class GuestProfileResourceImpl implements GuestProfileResource {
 		return guestService.guestById(id).orElseThrow(() -> new RecordNotFoundException("Guest Not found by " + id));
 	}
 
-	@PostMapping("/guestservice")
+	@PostMapping("/guest/signup")
 	@ApiOperation(value = "Add Guest")
 	public ResponseEntity<GuestDataModel> add(
 			@ApiParam(value = "Guest object store in database table", required = true)
 			@Valid @RequestBody GuestDataModel guest) {
-		GuestDataModel guest1 = guestService.saveGuest(guest);
-		return new ResponseEntity<>(guest1, HttpStatus.OK);
+		GuestDataModel guestDataModel = guestService.saveGuest(guest);
+		return new ResponseEntity<>(guestDataModel, HttpStatus.OK);
 	}
 
 }
