@@ -13,6 +13,10 @@ public class GuestDataModel {
 	private String middleName;
 	@NotBlank(message = "Last Name is mandatory")
 	private String lastName;
+	@NotBlank(message = "User Name is mandatory")
+	private String userName;
+	@NotBlank(message = "Password is mandatory")
+	private String password;
 	@NotBlank(message = "house number is mandatory")
 	private String houseNumber;
 	@NotBlank(message = "street is mandatory")
@@ -37,6 +41,7 @@ public class GuestDataModel {
 		this.firstName = guest.getName().getFirstName();
 		this.middleName = guest.getName().getMiddleName();
 		this.lastName = guest.getName().getLastName();
+		this.userName = guest.getUserName();
 		this.houseNumber = guest.getAddress().getAddressLine1();
 		this.street = guest.getAddress().getAddressLine2();
 		this.city = guest.getAddress().getCity();
@@ -46,6 +51,14 @@ public class GuestDataModel {
 		this.email = guest.getEmail();
 		this.phoneNumber = guest.getPhoneNumber();
 		this.gender = guest.getGender();
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getFirstName() {
@@ -74,6 +87,14 @@ public class GuestDataModel {
 
 	public String getHouseNumber() {
 		return houseNumber;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void setHouseNumber(String houseNumber) {

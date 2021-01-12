@@ -9,13 +9,13 @@ import com.epam.incubation.service.guestprofile.datamodel.GuestDataModel;
 import com.epam.incubation.service.guestprofile.model.Address;
 import com.epam.incubation.service.guestprofile.model.Guest;
 import com.epam.incubation.service.guestprofile.model.Name;
-import com.epam.incubation.service.guestprofile.repository.GuestReposity;
+import com.epam.incubation.service.guestprofile.repository.GuestRepository;
 
 @Service
 public class GuestServiceImpl implements GuestService {
 
 	@Autowired
-	GuestReposity guestRepository;
+	GuestRepository guestRepository;
 
 	public Optional<GuestDataModel> guestById(Integer id) {
 		Optional<GuestDataModel> guestDataModel = Optional.ofNullable(null);
