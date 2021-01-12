@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.epam.incubation.service.guestprofile.datamodel.GuestDataModel;
+import com.epam.incubation.service.guestprofile.exception.RecordNotFoundException;
 import com.epam.incubation.service.guestprofile.model.Address;
 import com.epam.incubation.service.guestprofile.model.Guest;
 import com.epam.incubation.service.guestprofile.model.Name;
@@ -27,6 +28,19 @@ public class GuestServiceImpl implements GuestService {
 			guestDataModel = Optional.of(convertEntityToDataModel(guest.get()));
 		}
 		return guestDataModel;
+	}
+
+	public GuestDataModel disableGuest(Integer id) {
+		Optional<GuestDataModel> guestDataModel;
+		Optional<Guest> guest = guestRepository.findById(id);
+		if (guest.isPresent()) {
+			Guest guestUpdate = guest.get();
+			guestUpdate.setActive(false);
+			guestUpdate = guestRepository.save(guestUpdate);
+			guestDataModel = Optional.of(convertEntityToDataModel(guestUpdate));
+		} else
+			throw new RecordNotFoundException("Guest Not found with " + id);
+		return guestDataModel.get();
 	}
 
 	public GuestDataModel saveGuest(GuestDataModel guest) {

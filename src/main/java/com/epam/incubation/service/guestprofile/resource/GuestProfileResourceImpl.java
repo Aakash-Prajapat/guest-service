@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +47,13 @@ public class GuestProfileResourceImpl implements GuestProfileResource {
 			@ApiParam(value = "Guest object store in database table", required = true)
 			@Valid @RequestBody GuestDataModel guest) {
 		GuestDataModel guestDataModel = guestService.saveGuest(guest);
+		return new ResponseEntity<>(guestDataModel, HttpStatus.CREATED);
+	}
+
+	@PutMapping("/guest/disable")
+	@ApiOperation(value = "Disable Guest")
+	public ResponseEntity<GuestDataModel> disableGuest(Integer id) {
+		GuestDataModel guestDataModel = guestService.disableGuest(id);
 		return new ResponseEntity<>(guestDataModel, HttpStatus.OK);
 	}
 
