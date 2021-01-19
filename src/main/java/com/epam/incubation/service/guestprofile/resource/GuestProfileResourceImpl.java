@@ -24,19 +24,16 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("/api/v1")
 @Api(value = "Guest Profile Service")
 public class GuestProfileResourceImpl implements GuestProfileResource {
 
 	@Autowired
 	GuestServiceImpl guestService;
-
-	@GetMapping("/guest/{id}")
+	
+	@GetMapping("/guests/{id}")
 	@ApiOperation(value = "Get Guest Details by Id")
-	@ApiResponses(value = {
-		    @ApiResponse(code = 200, message = "Successfully retrieved"),
-		    @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
-		})
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved"),
+			@ApiResponse(code = 404, message = "The resource you were trying to reach is not found") })
 	public GuestDataModel getGuestById(@PathVariable(value = "id") Integer id) {
 		return guestService.guestById(id).orElseThrow(() -> new RecordNotFoundException("Guest Not found by " + id));
 	}
@@ -44,15 +41,16 @@ public class GuestProfileResourceImpl implements GuestProfileResource {
 	@PostMapping("/guest/signup")
 	@ApiOperation(value = "Add Guest")
 	public ResponseEntity<GuestDataModel> add(
-			@ApiParam(value = "Guest object store in database table", required = true)
-			@Valid @RequestBody GuestDataModel guest) {
+			@ApiParam(value = "Guest object store in database table", required = true) @Valid @RequestBody GuestDataModel guest) {
 		GuestDataModel guestDataModel = guestService.saveGuest(guest);
 		return new ResponseEntity<>(guestDataModel, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/guest/disable")
+	@PutMapping("/guest/disable/{id}")
 	@ApiOperation(value = "Disable Guest")
-	public ResponseEntity<GuestDataModel> disableGuest(Integer id) {
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully disabled"),
+			@ApiResponse(code = 404, message = "The resource you were trying to reach is not found") })
+	public ResponseEntity<GuestDataModel> disableGuest(@PathVariable(value = "id") Integer id) {
 		GuestDataModel guestDataModel = guestService.disableGuest(id);
 		return new ResponseEntity<>(guestDataModel, HttpStatus.OK);
 	}

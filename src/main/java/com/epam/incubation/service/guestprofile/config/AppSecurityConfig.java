@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.epam.incubation.service.guestprofile.service.GuestDetailsServiceImpl;
 
@@ -29,14 +28,15 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(guestDetailsService()).passwordEncoder(bCryptPasswordEncoder);
+
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/").permitAll()
-				.antMatchers(HttpMethod.POST, "/api/v1/guest/signup").permitAll();
+		http.authorizeRequests()
+		.antMatchers(HttpMethod.POST, "/guest/signup").permitAll()
+		.antMatchers("/guest/**").hasAnyAuthority("ADMIN").and().formLogin();
 		http.csrf().disable();
-        http.headers().frameOptions().disable();
+		http.headers().frameOptions().disable();
 	}
-
 }

@@ -21,6 +21,7 @@ public class GuestDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<String> roles = Arrays.asList(guest.getRole().split(","));
+		//List<String> roles = Arrays.asList("STANDARD", "ADMIN");
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
 		for (String role : roles) {

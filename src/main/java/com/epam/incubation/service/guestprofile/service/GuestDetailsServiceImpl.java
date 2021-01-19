@@ -24,7 +24,7 @@ public class GuestDetailsServiceImpl implements UserDetailsService {
 			throw new RecordNotFoundException("Could not find guest by " + userName);
 		}
 
-		return new org.springframework.security.core.userdetails.User(guest.getUserName(), guest.getPassword(), Collections.emptyList());
+		return new org.springframework.security.core.userdetails.User(guest.getUserName(), guest.getPassword(), guest.getRole("test"));
 	}
 
 }
