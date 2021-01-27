@@ -1,42 +1,43 @@
 package com.epam.incubation.service.guestprofile.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import com.epam.incubation.service.guestprofile.service.GuestDetailsServiceImpl;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-	@Bean
-	public UserDetailsService guestDetailsService() {
-		return new GuestDetailsServiceImpl();
-	}
-
+    private JwtRequestFilter filter;
+	
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(guestDetailsService()).passwordEncoder(bCryptPasswordEncoder);
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-	}
-
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+    }
+	
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-		.antMatchers(HttpMethod.POST, "/guest/signup").permitAll()
-		.antMatchers("/guest/**").hasAnyAuthority("ADMIN").and().formLogin();
-		http.csrf().disable();
-		http.headers().frameOptions().disable();
-	}
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(AUTH_WHITELIST);
+    }
+
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/h2-console",
+            "/h2-console/**",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
 }

@@ -1,9 +1,5 @@
 package com.epam.incubation.service.guestprofile.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,8 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
 public class Guest {
@@ -52,17 +46,6 @@ public class Guest {
 
 	public String getRole() {
 		return role;
-	}
-	
-	public List<SimpleGrantedAuthority> getRole(String granted) {
-		List<String> roles = Arrays.asList(this.getRole().split(","));
-		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-		for (String role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role));
-		}
-
-		return authorities;
 	}
 
 	public void setRole(String role) {

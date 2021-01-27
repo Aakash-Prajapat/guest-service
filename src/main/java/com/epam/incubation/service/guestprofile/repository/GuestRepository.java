@@ -8,5 +8,4 @@ import com.epam.incubation.service.guestprofile.model.Guest;
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Integer> {
 
-	public Guest getGuestByUserName(String userName);
 }

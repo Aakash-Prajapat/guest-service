@@ -36,11 +36,12 @@ public class GuestDataModel {
 	private Long phoneNumber;
 	@NotNull(message = "Gender is mandatory")
 	private Character gender;
+	private boolean active;
 
 	public GuestDataModel() {
-		
+
 	}
-	
+
 	public GuestDataModel(Guest guest) {
 		this.firstName = guest.getName().getFirstName();
 		this.middleName = guest.getName().getMiddleName();
@@ -55,6 +56,15 @@ public class GuestDataModel {
 		this.email = guest.getEmail();
 		this.phoneNumber = guest.getPhoneNumber();
 		this.gender = guest.getGender();
+		this.active = guest.isActive();
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public String getUserName() {
