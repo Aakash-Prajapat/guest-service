@@ -5,6 +5,7 @@ import java.util.List;
 
 public class UserReservationData {
 
+	private Integer reservationId;
 	private Integer guestId;
 	private Integer hotelId;
 	private Date checkInDate;
@@ -13,6 +14,14 @@ public class UserReservationData {
 	private String state;
 	private Double totalAmount;
 	private List<UserReservationLineDetails> reservationLineDetails;
+
+	public Integer getReservationId() {
+		return reservationId;
+	}
+
+	public void setReservationId(Integer reservationId) {
+		this.reservationId = reservationId;
+	}
 
 	public Integer getGuestId() {
 		return guestId;

@@ -85,7 +85,7 @@ class GuestProfileResourceImplTest {
 		given(service.guestById(1)).willThrow(new RecordNotFoundException("Record Not Found with 1"));
 
 		mockMvc.perform(
-				MockMvcRequestBuilders.get("/guestservice/1").with(user("Guest").password("password").roles("GUEST")))
+				MockMvcRequestBuilders.get("/guestservice/1").with(user("Guest").password("test").roles("GUEST")))
 				.andExpect(status().isNotFound()).andDo(MockMvcResultHandlers.print());
 	}
 
@@ -122,7 +122,7 @@ class GuestProfileResourceImplTest {
 		
 		given(service.guestHistory(1)).willReturn(Arrays.asList(reservations1));
 		mockMvc.perform(MockMvcRequestBuilders.get("/guestservice/guesthistory/1")
-				.with(user("Guest").password("password").roles("GUEST"))).andExpect(status().isOk())
+				.with(user("Guest").password("test").roles("GUEST"))).andExpect(status().isOk())
 				.andDo(MockMvcResultHandlers.print());
 	}
 

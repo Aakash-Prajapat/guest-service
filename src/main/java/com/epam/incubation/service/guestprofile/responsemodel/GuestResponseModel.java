@@ -1,38 +1,46 @@
-package com.epam.incubation.service.guestprofile.model;
+package com.epam.incubation.service.guestprofile.responsemodel;
 
 import org.springframework.http.HttpStatus;
 
 import com.epam.incubation.service.guestprofile.datamodel.ApiError;
 
-public class ApiResponse<T extends Object> {
+public class GuestResponseModel<T> {
 
 	private T data;
-	private HttpStatus status;
 	private ApiError error;
+	private HttpStatus status;
 
-	public ApiResponse() {
+	public GuestResponseModel() {
 	}
-	public ApiResponse(T data, HttpStatus status, ApiError error) {
+
+	public GuestResponseModel(T data, ApiError error, HttpStatus status) {
 		this.data = data;
-		this.status = status;
 		this.error = error;
+		this.status = status;
 	}
+
 	public T getData() {
 		return data;
 	}
+
 	public void setData(T data) {
 		this.data = data;
 	}
-	public HttpStatus getStatus() {
-		return status;
-	}
-	public void setStatus(HttpStatus status) {
-		this.status = status;
-	}
+
 	public ApiError getError() {
 		return error;
 	}
+
 	public void setError(ApiError error) {
 		this.error = error;
 	}
+
+	public HttpStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(HttpStatus status) {
+		this.status = status;
+	}
+
 }

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.epam.incubation.service.guestprofile.datamodel.GuestDataModel;
@@ -19,6 +20,7 @@ import com.epam.incubation.service.guestprofile.model.Address;
 import com.epam.incubation.service.guestprofile.model.Guest;
 import com.epam.incubation.service.guestprofile.model.Name;
 import com.epam.incubation.service.guestprofile.repository.GuestRepository;
+import com.epam.incubation.service.guestprofile.responsemodel.GuestResponseModel;
 
 import brave.sampler.Sampler;
 
@@ -29,7 +31,7 @@ import brave.sampler.Sampler;
 public class GuestServiceImpl implements GuestService {
 
 	private final Logger logger = LoggerFactory.getLogger(GuestServiceImpl.class);
-	
+
 	@Autowired
 	private GuestRepository guestRepository;
 
@@ -95,14 +97,16 @@ public class GuestServiceImpl implements GuestService {
 	@Override
 	public List<UserReservationData> guestHistory(Integer id) throws Exception {
 		logger.info("Calling reservation service to fetch the guest history");
-		UserReservationDataResponse reservations = reservationServiceProxy.getGuestReservationHistory(id);
-		if (null == reservations) {
+		GuestResponseModel<UserReservationDataResponse> response = reservationServiceProxy
+				.getGuestReservationHistory(id);
+		if (null == response) {
 			throw new RecordNotFoundException("Exception while calling the reservaionService");
 		}
-		if (null == reservations.getError() && !reservations.getReservations().isEmpty()) {
+		if (null == response.getError() && null != response.getData()) {
+			UserReservationDataResponse reservations = response.getData();
 			return reservations.getReservations();
 		} else {
-			if (reservations.getError().getStatus().value() == 404)
+			if (response.getStatus() == HttpStatus.NOT_FOUND)
 				throw new RecordNotFoundException("Reservations not present with id " + id);
 			else
 				throw new GlobalException("Exception while retriving the guestHistory");
@@ -129,7 +133,7 @@ public class GuestServiceImpl implements GuestService {
 	private GuestDataModel convertEntityToDataModel(Guest guest) {
 		return new GuestDataModel(guest);
 	}
-	
+
 	@Bean
 	public Sampler defaultSampler() {
 		return Sampler.ALWAYS_SAMPLE;

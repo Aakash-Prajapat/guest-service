@@ -33,6 +33,7 @@ import com.epam.incubation.service.guestprofile.model.Address;
 import com.epam.incubation.service.guestprofile.model.Guest;
 import com.epam.incubation.service.guestprofile.model.Name;
 import com.epam.incubation.service.guestprofile.repository.GuestRepository;
+import com.epam.incubation.service.guestprofile.responsemodel.GuestResponseModel;
 
 @ExtendWith(MockitoExtension.class)
 class GuestServiceImplTest {
@@ -81,6 +82,7 @@ class GuestServiceImplTest {
 
 	@Test
 	void GuestHistory_ShouldReturnGuestHistory() throws Exception {
+
 		SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
 		UserReservationDataResponse userdata = new UserReservationDataResponse();
 		UserReservationData reservations1 = new UserReservationData();
@@ -102,7 +104,9 @@ class GuestServiceImplTest {
 		line1.setGuestDetails(Arrays.asList(guest1));
 		reservations1.setReservationLineDetails(Arrays.asList(line1));
 		userdata.setReservations(Arrays.asList(reservations1));
-		given(reservationServiceProxy.getGuestReservationHistory(1)).willReturn(userdata);
+		GuestResponseModel<UserReservationDataResponse> userReservations = new GuestResponseModel<UserReservationDataResponse>(
+				userdata, null, HttpStatus.OK);
+		given(reservationServiceProxy.getGuestReservationHistory(1)).willReturn(userReservations);
 		List<UserReservationData> reservations = service.guestHistory(1);
 		assertEquals(1, reservations.size());
 
@@ -141,22 +145,22 @@ class GuestServiceImplTest {
 
 	@Test
 	void GuestHistory_ShouldThrowNotFoundException1() throws Exception {
-		UserReservationDataResponse response = new UserReservationDataResponse();
 		ApiError error = new ApiError(HttpStatus.NOT_FOUND, "Reservations not present with id 1");
-		response.setError(error);
-		given(reservationServiceProxy.getGuestReservationHistory(1)).willReturn(response);
+		GuestResponseModel<UserReservationDataResponse> userReservations = new GuestResponseModel<UserReservationDataResponse>(
+				null, error, HttpStatus.OK);
+		given(reservationServiceProxy.getGuestReservationHistory(1)).willReturn(userReservations);
 		assertThrows(RecordNotFoundException.class, () -> service.guestHistory(1));
 	}
 
 	@Test
 	void GuestHistory_ShouldThrowGlobalException1() throws Exception {
-		UserReservationDataResponse response = new UserReservationDataResponse();
 		ApiError error = new ApiError();
 		error.setStatus(HttpStatus.SERVICE_UNAVAILABLE);
 		error.setSubErrors(null);
 		error.setMessage("Exception while retriving the guestHistory");
-		response.setError(error);
-		given(reservationServiceProxy.getGuestReservationHistory(1)).willReturn(response);
+		GuestResponseModel<UserReservationDataResponse> userReservations = new GuestResponseModel<UserReservationDataResponse>(
+				null, error, HttpStatus.OK);
+		given(reservationServiceProxy.getGuestReservationHistory(1)).willReturn(userReservations);
 		assertThrows(GlobalException.class, () -> service.guestHistory(1));
 	}
 
